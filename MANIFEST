@@ -1,0 +1,34 @@
+CHANGELOG
+FAQ
+FDL.txt
+GPL.txt
+Hadoop/pom.xml
+Hadoop/README
+Hadoop/src/main/java/Hadoop/CUICollectorMapReduce/ArticleCollector.java
+Hadoop/src/main/java/Hadoop/CUICollectorMapReduce/CUICollector.java
+Hadoop/src/test/java/Hadoop/CUICollectorMapReduce/AppTest.java
+Hadoop/TODO
+INSTALL
+lib/UMLS/Association.pm
+lib/UMLS/Association/ErrorHandler.pm
+lib/UMLS/Association/StatFinder.pm
+lib/UMLS/Association/Measures/Direct.pm
+lib/UMLS/Association/Measures/LSA.pm
+lib/UMLS/Association/Measures/LTA.pm
+lib/UMLS/Association/Measures/MWA.pm
+lib/UMLS/Association/Measures/SBC.pm
+lib/UMLS/Association/Measures/WSA.pm
+Makefile.PL
+MANIFEST			This list of files
+README
+t/functions.t
+t/sampleMatrix1
+t/sampleMatrix2
+t/sampleMatrix3
+t/sampleMatrix4
+TODO
+utils/CUICollector.pl
+utils/umls-association.pl
+utils/umls-association-runDataSet.pl
+META.yml                                 Module YAML meta-data (added by MakeMaker)
+META.json                                Module JSON meta-data (added by MakeMaker)

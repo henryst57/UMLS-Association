@@ -1,0 +1,106 @@
+NAME
+    UMLS::Association Installation Guide
+
+TESTING PLATFORMS
+    UMLS::Association has been developed and tested on Linux primarily using
+    Perl and MySQL.
+
+SYNOPSIS
+     perl Makefile.PL
+
+     make
+
+     make test
+
+     make install
+ 
+     perl CUICollector.pl --directory metamapped-baseline/2014/
+
+DESCRIPTION
+    The UMLS::Association module provides a framework for exploring the
+    semantic association of terms in the Unified Medical Language System
+    (UMLS).
+
+REQUIREMENTS
+  Programming Languages
+     Perl (version 5.8.0 or better)
+
+  CPAN Modules
+     Text::NSP
+     Compress::Zlib
+
+  Data
+    MetaMapped Medline Baseline available at
+    <http://ii.nlm.nih.gov/MMBaseline>
+
+INSTALLATION STAGES
+    The installation is broken into three stages:
+    Stage 1: Install Programming Languages
+                  If already installed you need at minimum: 
+                      - Perl version 5.10 or better
+
+    Stage 2: Install CPAN Modules
+    Stage 3: Build the bigram score database
+
+Stage 1: Install Programming Languages, if already installed go to Stage 2
+  Perl (version 5.8.5 or better)
+    Perl is freely available at <http://www.perl.org>. It is very likely
+    that you will already have Perl installed if you are using a Unix/Linux
+    based system.
+
+Stage 2 - Install CPAN modules, if already installed go to Stage 3
+  Text::NSP
+    UMLS-Association uses this package to obtain the frequency counts for
+    propagation. This package is freely available at:
+
+    <http://search.cpan.org/dist/Text-NSP/>
+
+  Compress::Zlib
+    This package is needed to read the compressed MMB output files into the
+    bigram database. These files are rather large so decompressing them on
+    the fly saves a tremoundous amount of space.
+
+    The package is freely available at:
+    <http://search.cpan.org/dist/Compress-Zlib/>
+
+BUILD BIGRAM DATABASE
+    Here we will process MetaMap Machine Output (MMO) formatted files into a
+    database containing bigram scores for Content Unique Identifies (CUIs).
+    These files are presumed to be compressed as GNU Zip archives (*.gz).
+
+    To process a directory containing only MMO files using default database
+    settings:
+
+        CUICollector.pl --directory metamapped-baseline/2015/
+
+    These same defaults:
+
+        CUICollector.pl --database CUI_Bigrams --hostname localhost --port 3306 --username user --password pass --file_step 5 --directory metamapped-baseline/2015/ --verbose
+
+    To process a single file:
+
+        CUICollector.pl --database filename_Bigrams --files filename.txt.gz
+
+    For a full listing of options,
+
+        CUICollector.pl --help
+
+    Or consult the documentation for CUICollector:
+
+        man CUICollector.pl
+
+CONTACT US
+     If you have any trouble installing and using MMB-Interface, please 
+     contact us via the users mailing list : 
+
+     umls-association@yahoogroups.com
+
+     You can join this group by going to:
+
+    <http://tech.groups.yahoo.com/group/umls-association/>
+
+     You may also contact us directly if you prefer :
+
+     Sam Henry: henryst at vcu.edu
+     Bridget T. McInnes: btmcinnes at vcu.edu
+
