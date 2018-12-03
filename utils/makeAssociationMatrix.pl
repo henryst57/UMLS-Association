@@ -5,10 +5,10 @@ use lib '/home/henryst/UMLS-Association/lib';
 use UMLS::Association;
 
 #user input
-my $cooccurrenceFile = '/home/henryst/data/1975_2015_window8_threshold1';
-my $outputFile = '/home/henryst/assocMatrix_x2_1975_2015_window8_ordered_threshold1_clean';
-my $measure = 'x2';
-my $noOrder = 0;
+my $cooccurrenceFile = 'data/1975_2015_window1';
+my $outputFile = '/home/henryst/assocMatrix_ll_1975_2015_window1_noOrder';
+my $measure = 'll';
+my $noOrder = 1;
 my $skipZero = 1;
 my $skipNegOne = 1;
 
@@ -97,13 +97,13 @@ sub readMatrix {
 	if ($lineCount%1000000 == 0) {
 	    my $numMillion = $lineCount/1000000;
 	    print STDERR "Read in $numMillion million lines\n";
-	}
+        }
     }
     close IN;
     print STDERR "Read in Co-occurrence Matrix\n";
 
     #return the read in and computed stats
-    return \%n11, \%n1p, %np1, $npp, \%uniqueCuis;
+    return \%n11, \%n1p, \%np1, $npp, \%uniqueCuis;
 }
 
 
