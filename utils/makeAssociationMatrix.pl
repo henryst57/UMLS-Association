@@ -6,8 +6,8 @@ use UMLS::Association;
 
 #user input
 my $cooccurrenceFile = 'data/1975_2015_window1';
-my $outputFile = '/home/henryst/assocMatrix_ll_1975_2015_window1_noOrder';
-my $measure = 'll';
+my $outputFile = '/home/henryst/assocMatrix_lf_1975_2015_window1_noOrder';
+my $measure = 'leftFisher';
 my $noOrder = 1;
 my $skipZero = 1;
 my $skipNegOne = 1;
@@ -128,6 +128,7 @@ sub computeAllAssociations {
 	# on matrix output, then only the matrix keys need
 	# to be iterated over, which saves a ton of time
 	$fastMethod = 1;
+	print STDERR "Using Fast Method\n";
     }
     #Else, n11=0 and/or n11=-1 need to be output, meaning 
     # that the association cannot be calculated are output
@@ -203,7 +204,7 @@ sub computeAllAssociations {
 
 	#update and output progress
 	$cuiCount++;
-	if ($cuiCount%100000 == 0) {
+	if ($cuiCount%10000 == 0) {
 	    print STDERR "computed $cuiCount / $totalCuiCount rows\n";
 	}
 
