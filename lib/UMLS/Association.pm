@@ -420,6 +420,9 @@ sub _calculateAssociation_fromObservedCounts {
     if ($statistic eq "freq") {
 	return $n11;
     }
+    elsif($statistic eq "random") {
+	return rand();
+    }
     elsif($statistic eq "ll")  { 
 	$usename = 'Text::NSP::Measures::'.$ngram.'D::MI::'.$statistic;
 	$includename = File::Spec->catfile('Text','NSP','Measures',$ngram.'D','MI',$statistic.'.pm');
