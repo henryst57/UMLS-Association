@@ -112,11 +112,17 @@ sub _statsFromAllCounts {
 	    }
 	}
     }
+
     #remove noorder double counts (nodes pointing at themselves)
     if ($noOrder) {
-	foreach my $key (@{${$pairHashRef}{'set1'}}) {
-	    if (exists ${${$subGraphRef}{$key}}{$key}) {
-		$n11 -= ${${$subGraphRef}{$key}}{$key};
+	foreach my $key1 (@{${$pairHashRef}{'set1'}}) {
+	    if (exists ${${$subGraphRef}{$key1}}{$key1}) {
+		#remove double counts, only if the key is in key2's set
+		foreach my $key2 (@{${$pairHashRef}{'set2'}}) {
+		    if ($key1 eq $key2) {
+			$n11 -= ${${$subGraphRef}{$key1}}{$key1};
+		    }
+		}
 	    }
 	}
     }
