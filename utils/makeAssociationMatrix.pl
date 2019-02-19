@@ -5,14 +5,78 @@ use lib '/home/henryst/UMLS-Association/lib';
 use UMLS::Association;
 
 #user input
-my $cooccurrenceFile = 'data/1975_2015_window1';
-my $outputFile = '/home/henryst/assocMatrix_lf_1975_2015_window1_noOrder';
-my $measure = 'leftFisher';
+my $cooccurrenceFile = '/home/henryst/data/1975_2015_window1';
+my $outputFile = 'assocMatrix_x2_1975_2015_window1_noOrder';
+my $measure = 'x2';
 my $noOrder = 1;
 my $skipZero = 1;
 my $skipNegOne = 1;
-
 &computeAssociationMatrix($cooccurrenceFile, $outputFile, $measure, $noOrder, $skipZero, $skipNegOne);
+
+=comment
+my $cooccurrenceFile = '/home/henryst/data/1975_2015_window1';
+my $outputFile = 'assocMatrix_ll_1975_2015_window1_noOrder';
+my $measure = 'll';
+my $noOrder = 1;
+my $skipZero = 1;
+my $skipNegOne = 1;
+&computeAssociationMatrix($cooccurrenceFile, $outputFile, $measure, $noOrder, $skipZero, $skipNegOne);
+
+my $cooccurrenceFile = '/home/henryst/data/1975_2015_window1';
+my $outputFile = 'assocMatrix_dice_1975_2015_window1_noOrder';
+my $measure = 'dice';
+my $noOrder = 1;
+my $skipZero = 1;
+my $skipNegOne = 1;
+&computeAssociationMatrix($cooccurrenceFile, $outputFile, $measure, $noOrder, $skipZero, $skipNegOne);
+
+my $cooccurrenceFile = '/home/henryst/data/1975_2015_window1';
+my $outputFile = 'assocMatrix_odds_1975_2015_window1_noOrder';
+my $measure = 'odds';
+my $noOrder = 1;
+my $skipZero = 1;
+my $skipNegOne = 1;
+&computeAssociationMatrix($cooccurrenceFile, $outputFile, $measure, $noOrder, $skipZero, $skipNegOne);
+
+
+#########################################################
+#   Ordered
+#######################################################
+my $cooccurrenceFile = '/home/henryst/data/1975_2015_window1';
+my $outputFile = 'assocMatrix_x2_1975_2015_window1_ordered';
+my $measure = 'x2';
+my $noOrder = 0;
+my $skipZero = 1;
+my $skipNegOne = 1;
+&computeAssociationMatrix($cooccurrenceFile, $outputFile, $measure, $noOrder, $skipZero, $skipNegOne);
+
+my $cooccurrenceFile = '/home/henryst/data/1975_2015_window1';
+my $outputFile = 'assocMatrix_ll_1975_2015_window1_ordered';
+my $measure = 'll';
+my $noOrder = 0;
+my $skipZero = 1;
+my $skipNegOne = 1;
+&computeAssociationMatrix($cooccurrenceFile, $outputFile, $measure, $noOrder, $skipZero, $skipNegOne);
+
+my $cooccurrenceFile = '/home/henryst/data/1975_2015_window1';
+my $outputFile = 'assocMatrix_dice_1975_2015_window1_ordered';
+my $measure = 'dice';
+my $noOrder = 0;
+my $skipZero = 1;
+my $skipNegOne = 1;
+&computeAssociationMatrix($cooccurrenceFile, $outputFile, $measure, $noOrder, $skipZero, $skipNegOne);
+
+my $cooccurrenceFile = '/home/henryst/data/1975_2015_window1';
+my $outputFile = 'TEST_assocMatrix_odds_1975_2015_window1_ordered';
+my $measure = 'odds';
+my $noOrder = 0;
+my $skipZero = 1;
+my $skipNegOne = 1;
+&computeAssociationMatrix($cooccurrenceFile, $outputFile, $measure, $noOrder, $skipZero, $skipNegOne);
+=cut
+
+
+
 
 
 
@@ -32,7 +96,7 @@ sub computeAssociationMatrix {
     my($n11Ref, $n1pRef, $np1Ref, $npp, $uniqueCuisRef) = &readMatrix($cooccurrenceFile, $noOrder);
 
     #compute and output the association matrix
-    &computeAllAssociations($n11Ref, $n1pRef, $np1Ref, $npp, $uniqueCuisRef, $cooccurrenceFile, $outputFile, $measure, $noOrder, $skipZero, $skipNegOne); 
+    &computeAllAssociations($n11Ref, $n1pRef, $np1Ref, $npp, $uniqueCuisRef, $cooccurrenceFile, $outputFile, $measure, $skipZero, $skipNegOne); 
 }
 
 
@@ -70,8 +134,12 @@ sub readMatrix {
 	    $n11{$vals[0]} = \%emptyHash;                                                             
 	}                                                                                             
 	${$n11{$cui1}}{$cui2} += $value;                                                              
-	if ($noOrder) {                                                                               
-	    ${$n11{$cui2}}{$cui1} += $value;                                                          
+	if ($noOrder) {
+	    #avoid double counting
+	    if ($cui1 ne $cui2) {
+		#increment other way
+		${$n11{$cui2}}{$cui1} += $value; 
+	    }                                                         
 	}                                                                         
 
 	#update unique cuis                                                                           
@@ -81,15 +149,23 @@ sub readMatrix {
 	#update n1p and np1                                                                           
 	$n1p{$cui1} += $value;                                                                        
 	$np1{$cui2} += $value;                                                                        
-	if ($noOrder > 0) {                                                                           
-	    $n1p{$cui2} += $value;                                                                    
-	    $np1{$cui1} += $value;                                                                    
+	if ($noOrder > 0) {     
+	    #avoid double counting
+	    if ($cui1 ne $cui2) {
+		#increment other way
+		$n1p{$cui2} += $value;                                                                    
+		$np1{$cui1} += $value;
+	    }                                                                    
 	}                                                                                             
 	
 	#update $npp                                                                                  
 	$npp += $value;                                                                               
-	if ($noOrder) {                                                                               
-	    $npp += $value;                                                                           
+	if ($noOrder) { 
+	    #avoid double counting
+	    if ($cui1 ne $cui2) {
+		#increment other way
+		$npp += $value;         
+	    }                                                                  
 	}                                                                                             
 
 	#output status                                                                                
@@ -117,22 +193,8 @@ sub computeAllAssociations {
     my $cooccurrenceFile = shift;
     my $outputFile = shift;
     my $measure = shift; 
-    my $noOrder = shift;
     my $skipZero = shift;
     my $skipNegOne = shift;
-
-    #determine if fast method can be used
-    my $fastMethod = 0;
-    if ($skipZero && $skipNegOne) {
-	#If both zero and negative one are skipped 
-	# on matrix output, then only the matrix keys need
-	# to be iterated over, which saves a ton of time
-	$fastMethod = 1;
-	print STDERR "Using Fast Method\n";
-    }
-    #Else, n11=0 and/or n11=-1 need to be output, meaning 
-    # that the association cannot be calculated are output
-    # and we need to iterate over all possible matrix pairs
 
     # Initalize UMLS::Association
     my %params = ();
@@ -143,59 +205,41 @@ sub computeAllAssociations {
     # Compute the associaiton between every unique cui and every other unique cui
     # output the results as they are computed
     open OUT, ">$outputFile" or die ("ERROR: cannot open outputFile: $outputFile\n");
+    print "outputFile = $outputFile\n";
     my $cuiCount = 0;
     my $totalCuiCount = scalar keys %{$uniqueCuisRef};
     
     #get the output loop keys to iterate over (whole vocab, or just n11 keys)
-    my @cui1Keys = ();
-    if ($fastMethod) {
-	@cui1Keys = sort keys %{$n11Ref};
-    }
-    else {
-	@cui1Keys = sort keys %{$uniqueCuisRef};
-    }
-
+    my @cuiKeys = sort keys %{$uniqueCuisRef};
+   
     #generate association scores for all pairs needed)
-    foreach my $cui1 (@cui1Keys) {
+    foreach my $cui1 (@cuiKeys) {
 	print OUT "$cui1";
-
-	#get the inner loop keys to iterate over (whole vocab, or just n11{$cui1} keys)
-	my @cui2Keys = ();
-	if ($fastMethod) {
-	    @cui2Keys =  sort keys %{${$n11Ref}{$cui1}};
-	}
-	else {
-	    @cui2Keys = sort keys %{$uniqueCuisRef};
-	}
-
+   
 	#iterate over cui1, cui2 pairs
-	foreach my $cui2 (sort keys %{$uniqueCuisRef}) {
+	foreach my $cui2 (@cuiKeys) {
 	    #calculate and output pair association
 	    my $pairN11 = ${${$n11Ref}{$cui1}}{$cui2};
 	    my $pairN1P = ${$n1pRef}{$cui1};
 	    my $pairNP1 = ${$np1Ref}{$cui2};
 	    
-	    #check for and correct non-existant values
-	    if (!defined $pairN11) {
-		$pairN11 = 0;
+	    #Only calculate if both CUIs are have n1p's and np1's
+	    my $value = -1;
+	    if (defined $pairN1P && defined $pairNP1) {
+		if (!defined $pairN11) {
+		    $pairN11 = 0;
+		}
+		#calculate the association
+		$value = $association->_calculateAssociation_fromObservedCounts(
+		    $pairN11, $pairN1P, $pairNP1, $npp, $measure);		}
 	    }
-	    if (!defined $pairN1P) {
-		$pairN1P = -1;
-	    }
-	    if (!defined $pairNP1) {
-		$pairNP1 = -1;
-	    }
-	    
-	    #calculate the association
-	    my $value = $association->_calculateAssociation_fromObservedCounts(
-		$pairN11, $pairN1P, $pairNP1, $npp, $measure);
 
 	    #output the value (but also check if it should be skipped)
 	    if ($skipZero && $value == 0) {
 		next;
 	    }
 	    if ($skipNegOne && $value == -1) {
-		next;
+	        next;
 	    }
 	    #skipping tests failed, so output the value
 	    print OUT "<>$cui2,$value"
@@ -204,9 +248,9 @@ sub computeAllAssociations {
 
 	#update and output progress
 	$cuiCount++;
-	if ($cuiCount%10000 == 0) {
-	    print STDERR "computed $cuiCount / $totalCuiCount rows\n";
-	}
+	#if ($cuiCount%10000 == 0) {
+	    print STDERR "   computed $cuiCount / $totalCuiCount rows\n";
+	#}
 
     }
     close OUT;
