@@ -231,9 +231,9 @@ sub computeAllAssociations {
 		}
 		#calculate the association
 		$value = $association->_calculateAssociation_fromObservedCounts(
-		    $pairN11, $pairN1P, $pairNP1, $npp, $measure);		}
+		    $pairN11, $pairN1P, $pairNP1, $npp, $measure);		
 	    }
-
+	
 	    #output the value (but also check if it should be skipped)
 	    if ($skipZero && $value == 0) {
 		next;
