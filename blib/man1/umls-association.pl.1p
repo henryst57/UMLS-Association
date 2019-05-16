@@ -132,71 +132,163 @@
 .rm #[ #] #H #V #F C
 .\" ========================================================================
 .\"
-.IX Title "UMLS::Association 3pm"
-.TH UMLS::Association 3pm "2019-05-16" "perl v5.18.2" "User Contributed Perl Documentation"
+.IX Title "UMLS-ASSOCIATION 1p"
+.TH UMLS-ASSOCIATION 1p "2019-05-16" "perl v5.18.2" "User Contributed Perl Documentation"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
 .nh
 .SH "NAME"
-UMLS::Association \-  A suite of Perl modules that implement a number of semantic
-association measures in order to calculate the semantic association between two
-concepts in the UMLS.
-.SH "INSTALL"
-.IX Header "INSTALL"
-To install the module, run the following magic commands:
+umls\-association.pl This program calculates the assocation between 
+two concepts or sets of concepts
+.SH "SYNOPSIS"
+.IX Header "SYNOPSIS"
+This utility takes two sets of concepts and returns their assocation 
+score
+.SH "USAGE"
+.IX Header "USAGE"
+Usage: umls\-assocation.pl [\s-1OPTIONS\s0] CUI_set1 CUI_set2 \-\-matrix Matrix_File \-\-measure Assoc_Measure
+.SH "INPUT"
+.IX Header "INPUT"
+.SS "[CUI_set1] [CUI_set2]"
+.IX Subsection "[CUI_set1] [CUI_set2]"
+Two sets of CUIs in the \s-1UMLS.\s0 Each \s-1CUI\s0 in the \s-1CUI\s0 set is comma seperated
 .PP
-.Vb 4
-\&  perl Makefile.PL
-\&  make
-\&  make test
-\&  make install
+[Matrix_File]
+.PP
+File name containing co-occurrence data in sparse matrix format
+.PP
+[Assoc_Measure]
+.PP
+A string specifying the association measure to use
+The measure used to calculate the assocation. Recommended = x2
+.PP
+The package uses the Text::NSP package to do the calculation. 
+The measure included within this package are:
+.PP
+.Vb 10
+\&    1.  Frequency
+\&    2.  Random
+\&    3.  Dice Coefficient
+\&    4.  Fishers exact test \- left sided
+\&    5.  Fishers exact test \- right sided
+\&    6.  Fishers twotailed test \- right sided
+\&    7.  Jaccard Coefficient
+\&    8.  Log\-likelihood ratio
+\&    9.  Mutual Information
+\&    10.  Odds Ratio
+\&    11.  Pointwise Mutual Information
+\&    12. Phi Coefficient
+\&    13. Pearson\*(Aqs Chi Squared Test
+\&    14. Poisson Stirling Measure
+\&    15. T\-score
 .Ve
+.SH "OPTIONS"
+.IX Header "OPTIONS"
+Optional command line arguements
+.SS "General Options:"
+.IX Subsection "General Options:"
+Displays the quick summary of program options.
 .PP
-This will install the module in the standard location. You will, most
-probably, require root privileges to install in standard system
-directories. To install in a non-standard directory, specify a prefix
-during the 'perl Makefile.PL' stage as:
+\fI\-\-noorder\fR
+.IX Subsection "--noorder"
 .PP
-.Vb 1
-\&  perl Makefile.PL PREFIX=/home/sid
-.Ve
+If selected, the order in which CUIs appear will be disregarded when 
+the association score is calculated.
 .PP
-It is possible to modify other parameters during installation. The
-details of these can be found in the ExtUtils::MakeMaker
-documentation. However, it is highly recommended not messing around
-with other parameters, unless you know what you're doing.
-.SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
-This package provides a Perl interface to
-.SH "INITIALIZING THE MODULE"
-.IX Header "INITIALIZING THE MODULE"
-To create an instance of the interface object, using default values
-for all configuration options:
+\fI\-\-lta\fR
+.IX Subsection "--lta"
 .PP
+Linking Term Association \- Calculates the association scores using 
+implicit or intermediate relationships between the specified CUIs,
+and the count of unique shared co-occurrences.
+.PP
+\fI\-\-mwa\fR
+.IX Subsection "--mwa"
+.PP
+Minimum Weight Association \- Calculates the association scores using 
+implicit or intermediate relationships between the specified CUIs, 
+and the minimum co-occurrence count between shared co-occurrences.
+.PP
+\fI\-\-lsa\fR
+.IX Subsection "--lsa"
+.PP
+Linking Set Association \- Calculates the association scores using the
+association between the sets of co-occurring terms of the original terms
+.PP
+\fI\-\-sbc\fR
+.IX Subsection "--sbc"
+.PP
+Shared B to C association \- Calculates the association scores using
+the association between the set of A co-occuring terms, and the 
+term C.
+.PP
+\fI\-\-wsa\fR
+.IX Subsection "--wsa"
+.PP
+Weighted Set Association \- Same as linking set association, but weights
+the members of the linking set based on their association with the original
+term. The association measure used for weighting is the same as specified
+for quantifying association overall (\-\-measure)
+.PP
+\fI\-\-nonorm\fR
+.IX Subsection "--nonorm"
+.PP
+Indicates that the weights in \s-1WSA\s0 will \s-1NOT\s0 be normalized between 0 and 1
+and instrad the direct association score will be used
+.PP
+\fI\-\-precision N\fR
+.IX Subsection "--precision N"
+.PP
+Displays values up to N places of decimal. (\s-1DEFAULT: 4\s0)
+.PP
+\fI\-\-help\fR
+.IX Subsection "--help"
+.PP
+Displays the quick summary of program options.
+.PP
+\fI\-\-version\fR
+.IX Subsection "--version"
+.PP
+Displays the version information.
+.SH "OUTPUT"
+.IX Header "OUTPUT"
+The association between the two concepts (or terms)
+.SH "SYSTEM REQUIREMENTS"
+.IX Header "SYSTEM REQUIREMENTS"
+.IP "\(bu" 4
+Perl (version 5.8.5 or better) \- http://www.perl.org
+.IP "\(bu" 4
+Text::NSP \- http://search.cpan.org/dist/Text\-NSP
+.SH "CONTACT US"
+.IX Header "CONTACT US"
 .Vb 2
-\&  use UMLS::Association;
-\&  my $associaton = UMLS::Association\->new();
+\&  If you have any trouble installing and using UMLS\-Assocation, 
+\&  please contact us via the users mailing list :
+\&    
+\&      umls\-association@yahoogroups.com
+\&     
+\&  You can join this group by going to:
+\&    
+\&      http://tech.groups.yahoo.com/group/umls\-assocation/
+\&     
+\&  You may also contact us directly if you prefer :
+\&    
+\&      Sam Henry: henryst at vcu.edu
 .Ve
-.PP
-More information is provided in the \s-1INSTALL\s0 file.
-.SH "REFERENCING"
-.IX Header "REFERENCING"
-If you write a paper that has used UMLS-Association in some way, we'd 
-certainly be grateful if you sent us a copy. Currently we have no paper
-referrencing the package hopefully we will soon.
-.SH "SEE ALSO"
-.IX Header "SEE ALSO"
-http://search.cpan.org/dist/UMLS\-Association
 .SH "AUTHOR"
 .IX Header "AUTHOR"
-Bridget T McInnes <btmcinnes@vcu.edu>
-Sam Henry <henryst@vcu.edu>
+.Vb 3
+\& Bridget T. McInnes, Virginia Commonwealth University 
+\& Alexander D. McQuilkin, Virginia Commonwealth University
+\& Sam Henry, Virginia Commonwealth University
+.Ve
 .SH "COPYRIGHT"
 .IX Header "COPYRIGHT"
-.Vb 3
-\& Copyright (c) 2015
-\& Sam Henry, Virginia Commonwealth University
+Copyright (c) 2015
+.PP
+.Vb 2
+\& Sam Henry, Virginia Commonwealth University 
 \& henryst at vcu.edu
 .Ve
 .PP
@@ -210,7 +302,7 @@ ANY WARRANTY\s0; without even the implied warranty of \s-1MERCHANTABILITY\s0 or 
 FOR A PARTICULAR PURPOSE.\s0 See the \s-1GNU\s0 General Public License for more details.
 .PP
 You should have received a copy of the \s-1GNU\s0 General Public License along with
-this program; if not, write to
+this program; if not, write to:
 .PP
 .Vb 3
 \& The Free Software Foundation, Inc.,

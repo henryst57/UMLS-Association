@@ -132,89 +132,119 @@
 .rm #[ #] #H #V #F C
 .\" ========================================================================
 .\"
-.IX Title "UMLS::Association::StatFinder 3pm"
-.TH UMLS::Association::StatFinder 3pm "2019-05-16" "perl v5.18.2" "User Contributed Perl Documentation"
+.IX Title "UMLS-ASSOCIATION-RUNDATASET 1p"
+.TH UMLS-ASSOCIATION-RUNDATASET 1p "2019-05-16" "perl v5.18.2" "User Contributed Perl Documentation"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
 .nh
 .SH "NAME"
-UMLS::Association::StatFinder \- provides the statistical association information 
-of the concept pairs in the UMLS
-.SH "DESCRIPTION For more information please see the UMLS::Association.pm documentation."
-.IX Header "DESCRIPTION For more information please see the UMLS::Association.pm documentation."
+umls\-association\-runDataSet.pl This program calculates the assocation a 
+dataset of term pairs
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
-use UMLS::Association::StatFinder;
-use UMLS::Association::ErrorHandler;
+This utility takes a file of line seperated term pairs as input. The file is 
+of the form: \*(L"cui1<>cui2\en\*(R" with each line containing a new cui pair. It
+outputs a line seperated list of association score and term pair of the 
+form: \*(L"score<>cui1<>cui2\*(R". Each line contains a different cui pair and their 
+score
+.SH "USAGE"
+.IX Header "USAGE"
+Usage: umls\-assocation\-runDataSet.pl [\s-1OPTIONS\s0] \s-1CUI_LIST_FILE OUTPUT_FILE\s0 \-\-measure Assoc_Measure \-\-matrix Matrix_FileName
+.SH "INPUT"
+.IX Header "INPUT"
+.SS "\s-1CUI_LIST_FILE\s0"
+.IX Subsection "CUI_LIST_FILE"
+the input file containing line seperated cui pairs of the form: \*(L"cui1<>cui2\*(R"
+.SS "\s-1OUTPUT_FILE\s0"
+.IX Subsection "OUTPUT_FILE"
+the output file, where each score and cui pair are output of the form: 
+score<>cui1<>cui2
 .PP
-\&\f(CW%params\fR = ();
+[Matrix_File]
 .PP
-\&\f(CW$statfinder\fR = UMLS::Association::StatFinder\->new(\e%params);
-die \*(L"Unable to create UMLS::Association::StatFinder object.\en\*(R" if(!$statfinder);
+File name containing co-occurrence data in sparse matrix format
 .PP
-my \f(CW$cui1\fR = C0018563;   
-my \f(CW$cui2\fR = C0446516;
+[Assoc_Measure]
 .PP
-# calculate measure assocation
-my \f(CW$measure\fR = \*(L"ll\*(R"; 
-my \f(CW$score\fR = \f(CW$statfinder\fR\->calculateStatistic($cui1, \f(CW$cui2\fR, \f(CW$measure\fR);
-.SH "INSTALL"
-.IX Header "INSTALL"
-.Vb 1
-\&    To install the module, run the following magic commands:
-\&
-\&    perl Makefile.PL
-\&    make
-\&    make test
-\&    make install
-\&
-\&    This will install the module in the standard location. You will, most
-\&    probably, require root privileges to install in standard system
-\&    directories. To install in a non\-standard directory, specify a prefix
-\&    during the \*(Aqperl Makefile.PL\*(Aq stage as:
-\&
-\&    perl Makefile.PL PREFIX=/home/bridget
-\&
-\&    It is possible to modify other parameters during installation. The
-\&    details of these can be found in the ExtUtils::MakeMaker
-\&    documentation. However, it is highly recommended not messing around
-\&    with other parameters, unless you know what you\*(Aqre doing.
-.Ve
-.SH "SEE ALSO"
-.IX Header "SEE ALSO"
-.Vb 1
-\&    <http://tech.groups.yahoo.com/group/umls\-similarity/>
+A string specifying the association measure to use
+The measure used to calculate the assocation. Recommended = x2
+.PP
+The package uses the Text::NSP package to do the calculation.
+The measure included within this package are: 
+    1.  Dice Coefficient 
+    2.  Fishers exact test \- left sided
+    3.  Fishers exact test \- right sided
+    4.  Fishers twotailed test \- right sided
+    5.  Jaccard Coefficient
+    6.  Log-likelihood ratio
+    7.  Mutual Information
+    8.  Odds Ratio
+    9.  Pointwise Mutual Information
+    10. Phi Coefficient
+    11. Pearson's Chi Squared Test
+    12. Poisson Stirling Measure
+    13. T\-score
+.SH "OPTIONS"
+.IX Header "OPTIONS"
+Optional command line arguements. These options are identical to 
+umls\-association.pl. Please see umls\-associaton.pl for descriptions.
+.SH "OUTPUT"
+.IX Header "OUTPUT"
+The association between the each concept pair of the input file written to 
+a new line of the output file.
+.SH "SYSTEM REQUIREMENTS"
+.IX Header "SYSTEM REQUIREMENTS"
+.IP "\(bu" 4
+Perl (version 5.8.5 or better) \- http://www.perl.org
+.IP "\(bu" 4
+Text::NSP \- http://search.cpan.org/dist/Text\-NSP
+.SH "CONTACT US"
+.IX Header "CONTACT US"
+.Vb 2
+\&  If you have any trouble installing and using UMLS\-Assocation, 
+\&  please contact us via the users mailing list :
+\&    
+\&      umls\-association@yahoogroups.com
+\&     
+\&  You can join this group by going to:
+\&    
+\&      http://tech.groups.yahoo.com/group/umls\-assocation/
+\&     
+\&  You may also contact us directly if you prefer :
+\&    
+\&      Sam Henry: henryst at vcu.edu
 .Ve
 .SH "AUTHOR"
 .IX Header "AUTHOR"
-.Vb 5
-\&    Bridget T McInnes <bmcinnes@vcu.edu>
-\&    Andriy Y. Mulyar  <andriy.mulyar@gmail.com>
-\&    Alexander D. McQuilkin <alexmcq99@yahoo.com>
-\&    Alex McQuilken <alexmcq99@yahoo.com>
-\&    Sam Henry <henryst@vcu.edu>
+.Vb 3
+\& Sam Henry, Virginia Commonwealth University
+\& Bridget T. McInnes, Virginia Commonwealth University 
+\& Alexander D. McQuilkin, Virginia Commonwealth University
 .Ve
 .SH "COPYRIGHT"
 .IX Header "COPYRIGHT"
+Copyright (c) 2015
+.PP
+.Vb 2
+\& Bridget T. McInnes, Virginia Commonwealth University 
+\& btmcinnes at vcu.edu
+.Ve
+.PP
+This program is free software; you can redistribute it and/or modify it under
+the terms of the \s-1GNU\s0 General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+.PP
+This program is distributed in the hope that it will be useful, but \s-1WITHOUT
+ANY WARRANTY\s0; without even the implied warranty of \s-1MERCHANTABILITY\s0 or \s-1FITNESS
+FOR A PARTICULAR PURPOSE.\s0 See the \s-1GNU\s0 General Public License for more details.
+.PP
+You should have received a copy of the \s-1GNU\s0 General Public License along with
+this program; if not, write to:
+.PP
 .Vb 3
-\&    Copyright (c) 2015
-\&    Sam Henry, Virginia Commonwealth University
-\&    henrystat vcu.edu
-\&
-\&    This program is free software; you can redistribute it and/or modify it under
-\&    the terms of the GNU General Public License as published by the Free Software
-\&    Foundation; either version 2 of the License, or (at your option) any later
-\&    version.
-\&
-\&    This program is distributed in the hope that it will be useful, but WITHOUT
-\&    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-\&    FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-\&
-\&    You should have received a copy of the GNU General Public License along with
-\&    this program; if not, write to
-\&
-\&    The Free Software Foundation, Inc.,
-\&    59 Temple Place \- Suite 330,
-\&    Boston, MA  02111\-1307, USA.
+\& The Free Software Foundation, Inc.,
+\& 59 Temple Place \- Suite 330,
+\& Boston, MA  02111\-1307, USA.
 .Ve

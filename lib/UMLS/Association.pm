@@ -94,7 +94,7 @@ my $pkg = "UMLS::Association";
 
 use vars qw($VERSION);
 
-$VERSION = '0.17';
+$VERSION = '0.19';
 
 my $errorhandler     = ""; 
 my $statfinder_G = "";   
